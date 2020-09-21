@@ -273,7 +273,7 @@ function buildGenerator(language, namespace) {
         .pipe(
             gulp.dest('./')
         ).pipe(
-            gulp.dest('../../../Light Server Front-End/Light Server Front-End/Light_Server_Front_End/ClientApp/src/assets/blockly/')
+            gulp.dest('../../../Light-Server-Front-End/Light Server Front-End/Light_Server_Front_End/ClientApp/src/assets/blockly/')
         );
     //).pipe(
 
