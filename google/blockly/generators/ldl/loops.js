@@ -31,7 +31,8 @@ Blockly.LDL['controls_repeat_ext'] = function (block) {
     var branch = Blockly.LDL.statementToCode(block, 'DO');
     branch = Blockly.LDL.addLoopTrap(branch, block);
 
-    alert(branch);
+    // alert(branch);
+    Blockly.LDL.instructions.removeTrailingComma(branch);
 
     var code =
         '"repeat": {\n' +

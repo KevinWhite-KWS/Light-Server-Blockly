@@ -29,6 +29,19 @@ Blockly.LDL.instructions.encodeInstructionOpcode = function (duration, opCode) {
     return instruction;
 };
 
+Blockly.LDL.instructions.removeTrailingComma = function (statements) {
+    if (statements === null || statements.length === 0) {
+        return statements;
+    }
+
+    // white space at end of statement - needs to be more sophisticated
+    var lastChar = statements.slice(-1);
+    debugger;
+    alert(lastChar);
+
+    return statements;
+}
+
 Blockly.LDL['ins_0_clear'] = function (block) {
     var duration = Number(block.getFieldValue('duration'));
     var encodedOpCode = Blockly.LDL.instructions.encodeInstructionOpcode(duration, 0);
