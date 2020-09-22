@@ -46,6 +46,22 @@ Blockly.LDL.instructions.removeTrailingComma = function (statements) {
     return statements;
 }
 
+Blockly.LDL['program'] = function (block) {
+    var name = block.getFieldValue('programName');
+    var instructions = Blockly.LDL.statementToCode(block, 'instructions');
+    instructions = Blockly.LDL.instructions.removeTrailingComma(instructions);
+
+    var code =
+        '{\n' + 
+        '\t"name" : "' + name + '",\n' +
+        '\t"instructions": {\n' +
+        '\t\t' + instructions +
+        '\t}\n' +
+        '}';
+
+    return code;
+};
+
 Blockly.LDL['ins_0_clear'] = function (block) {
     var duration = Number(block.getFieldValue('duration'));
     var encodedOpCode = Blockly.LDL.instructions.encodeInstructionOpcode(duration, 0);
