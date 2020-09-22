@@ -34,10 +34,14 @@ Blockly.LDL.instructions.removeTrailingComma = function (statements) {
         return statements;
     }
 
-    // white space at end of statement - needs to be more sophisticated
-    var lastChar = statements.slice(-1);
-    debugger;
-    alert(lastChar);
+    var splits = statements.split(',');
+    var last = splits[splits.length - 1];
+    if (last.trim().length === 0) {
+        // If there's nothing after the final , split then this means that
+        // we need to remove that last , but re-add what came after it
+        // as it may have been valid whitespace e.g. carriage-return
+        statements = statements.substring(0, statements.length - 1 - last.length) + last;
+    }
 
     return statements;
 }
@@ -94,7 +98,6 @@ Blockly.LDL['fixedpixelscolour'] = function (block) {
 
     // Colour picker.
     var code = pixelsEncoded + colour;
-    alert("'" + code + "'");
 
     return code;
 };
