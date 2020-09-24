@@ -107,6 +107,40 @@ Blockly.LDL['ins_2_pattern'] = function (block) {
     return code;
 };
 
+Blockly.LDL['ins_3_slider'] = function (block) {
+    var duration = Number(block.getFieldValue('duration'));
+    var width = Number(block.getFieldValue('width'));
+    var startFar = Number(block.getFieldValue('startFar') === 'TRUE');
+    var sliderColour = block.getFieldValue('sliderColour').replace('#', '').toUpperCase();
+    var backgroundColour = block.getFieldValue('backgroundColour').replace('#', '').toUpperCase();
+
+    var encodedOpCode = Blockly.LDL.instructions.encodeInstructionOpcode(duration, 3);
+    var encodedWidth = Blockly.LDL.instructions.decToHex(width, 2);
+    var encodedStartFar = Blockly.LDL.instructions.decToHex(startFar, 1);
+
+    // Colour picker.
+    var code = '"instruction" : "' + encodedOpCode + encodedWidth + encodedStartFar + sliderColour + backgroundColour + '",\n';
+
+    return code;
+};
+
+Blockly.LDL['ins_4_fade'] = function (block) {
+    var duration = Number(block.getFieldValue('duration'));
+    var step = Number(block.getFieldValue('step'));
+    var fadeOut = Number(block.getFieldValue('fadeOut') === 'TRUE');
+    var startColour = block.getFieldValue('startColour').replace('#', '').toUpperCase();
+    var endColour = block.getFieldValue('endColour').replace('#', '').toUpperCase();
+
+    var encodedOpCode = Blockly.LDL.instructions.encodeInstructionOpcode(duration, 4);
+    var encodedStep = Blockly.LDL.instructions.decToHex(step, 2);
+    var encodedFadeOut = Blockly.LDL.instructions.decToHex(fadeOut, 1);
+
+    // Colour picker.
+    var code = '"instruction" : "' + encodedOpCode + encodedStep + encodedFadeOut + startColour + endColour + '",\n';
+
+    return code;
+};
+
 Blockly.LDL['fixedpixelscolour'] = function (block) {
     var pixels = Number(block.getFieldValue('pixels'));
     var pixelsEncoded = Blockly.LDL.instructions.decToHex(pixels, 2);
