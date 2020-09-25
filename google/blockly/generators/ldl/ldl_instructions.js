@@ -141,6 +141,27 @@ Blockly.LDL['ins_4_fade'] = function (block) {
     return code;
 };
 
+Blockly.LDL['ins_5_stochastic'] = function (block) {
+    var duration = Number(block.getFieldValue('duration'));
+    var encodedOpCode = Blockly.LDL.instructions.encodeInstructionOpcode(duration, 5);
+
+    // Colour picker.
+    var branch = Blockly.LDL.statementToCode(block, 'colours');
+    branch = branch !== null ? branch.trim() : null;
+
+    if (branch === null || branch.length <= 0 || branch.length % 6 !== 0) {
+        return "";
+    }
+
+    var parts = branch.length / 6;
+    var partsEncoded = Blockly.LDL.instructions.decToHex(parts, 2);
+    var code = '"instruction" : "' + encodedOpCode + partsEncoded + branch + '",\n';
+
+    alert(code);
+
+    return code;
+};
+
 Blockly.LDL['fixedpixelscolour'] = function (block) {
     var pixels = Number(block.getFieldValue('pixels'));
     var pixelsEncoded = Blockly.LDL.instructions.decToHex(pixels, 2);
@@ -150,4 +171,9 @@ Blockly.LDL['fixedpixelscolour'] = function (block) {
     var code = pixelsEncoded + colour;
 
     return code;
+};
+
+Blockly.LDL['pixelscolour'] = function (block) {
+    var colour = block.getFieldValue('colour').replace('#', '').toUpperCase();
+    return colour;
 };
