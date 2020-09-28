@@ -46,6 +46,36 @@ Blockly.LDL.instructions.removeTrailingComma = function (statements) {
     return statements;
 }
 
+
+Blockly.LDL['repeat'] = function (block) {
+    var infiniteLoop = block.getFieldValue('infiniteLoop') === "TRUE";
+    var numberOfTimes = Number(block.getFieldValue("numberOfLoops"));
+    numberOfTimes = (infiniteLoop ? 0 : numberOfTimes);
+    var timesEncoded = Blockly.LDL.instructions.decToHex(numberOfTimes, 2);
+
+
+    var instructions = Blockly.LDL.statementToCode(block, 'instructions');
+    instructions = Blockly.LDL.instructions.removeTrailingComma(instructions);
+
+    var code =
+        '"repeat": {\n' +
+            '\t"times" : ' + numberOfTimes + ',\n' +
+            '\t"instructions": {\n' +
+            instructions +
+            '\t}\n' +
+            '}\n';
+
+    //var code =
+    //    '{\n' +
+    //        '\t"name" : "' + name + '",\n' +
+    //        '\t"instructions": {\n' +
+    //        '\t\t' + instructions +
+    //        '\t}\n' +
+    //        '}';
+
+    return code;
+};
+
 Blockly.LDL['program'] = function (block) {
     var name = block.getFieldValue('programName');
     var instructions = Blockly.LDL.statementToCode(block, 'instructions');
@@ -157,7 +187,32 @@ Blockly.LDL['ins_5_stochastic'] = function (block) {
     var partsEncoded = Blockly.LDL.instructions.decToHex(parts, 2);
     var code = '"instruction" : "' + encodedOpCode + partsEncoded + branch + '",\n';
 
-    alert(code);
+    return code;
+};
+
+
+Blockly.LDL['ins_6_blocks'] = function (block) {
+    var duration = Number(block.getFieldValue('duration'));
+    var encodedOpCode = Blockly.LDL.instructions.encodeInstructionOpcode(duration, 6);
+
+    // Colour picker.
+    var branch = Blockly.LDL.statementToCode(block, 'blocks');
+    branch = branch !== null ? branch.trim() : null;
+
+    if (branch === null || branch.length <= 0 || branch.length % 8 !== 0) {
+        return "";
+    }
+
+    var parts = branch.length / 8;
+    var pixels = "";
+    var colours = "";
+    for (var i = 0; i < parts; i++) {
+        var startPattern = i * 8;
+        pixels += branch.substring(startPattern, startPattern + 2);
+        colours += branch.substring(startPattern + 2, startPattern + 8);
+    }
+    var partsEncoded = Blockly.LDL.instructions.decToHex(parts, 2);
+    var code = '"instruction" : "' + encodedOpCode + partsEncoded + pixels + colours + '",\n';
 
     return code;
 };
