@@ -63,7 +63,7 @@ Blockly.LDL['repeat'] = function (block) {
             '\t"instructions": {\n' +
             instructions +
             '\t}\n' +
-            '}\n';
+            '},\n';
 
     //var code =
     //    '{\n' +
