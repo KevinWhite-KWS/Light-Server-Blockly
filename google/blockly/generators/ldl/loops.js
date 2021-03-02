@@ -34,11 +34,13 @@ Blockly.LDL['controls_repeat_ext'] = function (block) {
     branch = Blockly.LDL.instructions.removeTrailingComma(branch);
 
     var code =
-        '"repeat": {\n' +
-            '\t"times" : 0,\n' +
-            '\t"instructions": {\n' +
-                branch +
-            '\t}\n' +
+        '{' +
+            '\t"repeat": { \n' +
+                '\t\t"times" : 0,\n' +
+                '\t\t"instructions": [\n' +
+                    branch +
+                '\t\t]\n' +
+           '\t}' +
         '}\n';
 
 

@@ -58,12 +58,14 @@ Blockly.LDL['repeat'] = function (block) {
     instructions = Blockly.LDL.instructions.removeTrailingComma(instructions);
 
     var code =
-        '"repeat": {\n' +
-            '\t"times" : ' + numberOfTimes + ',\n' +
-            '\t"instructions": {\n' +
-            instructions +
-            '\t}\n' +
-            '},\n';
+        '{' +
+            '\t"repeat": {\n' +
+                '\t\t"times" : ' + numberOfTimes + ',\n' +
+                '\t\t"instructions": [\n' +
+                    instructions +
+                '\t\t]\n' +
+            '\t}' +
+        '}, \n';
 
     //var code =
     //    '{\n' +
@@ -84,9 +86,9 @@ Blockly.LDL['program'] = function (block) {
     var code =
         '{\n' + 
         '\t"name" : "' + name + '",\n' +
-        '\t"instructions": {\n' +
+        '\t"instructions": [\n' +
         '\t\t' + instructions +
-        '\t}\n' +
+        '\t]\n' +
         '}';
 
     return code;
@@ -95,7 +97,7 @@ Blockly.LDL['program'] = function (block) {
 Blockly.LDL['ins_0_clear'] = function (block) {
     var duration = Number(block.getFieldValue('duration'));
     var encodedOpCode = Blockly.LDL.instructions.encodeInstructionOpcode(duration, 0);
-    var code = '"instruction" : "' + encodedOpCode + '",\n';
+    var code = '"' + encodedOpCode + '",\n';
 
     return code;
 };
@@ -106,7 +108,7 @@ Blockly.LDL['ins_1_solid'] = function (block) {
     var colour = block.getFieldValue('colour').replace('#', '').toUpperCase();
 
     // Colour picker.
-    var code = '"instruction" : "' + encodedOpCode + colour + '",\n';
+    var code = '"' + encodedOpCode + colour + '",\n';
 
     return code;
 };
@@ -132,7 +134,7 @@ Blockly.LDL['ins_2_pattern'] = function (block) {
         colours += branch.substring(startPattern + 2, startPattern + 8);
     }
     var partsEncoded = Blockly.LDL.instructions.decToHex(parts, 2);
-    var code = '"instruction" : "' + encodedOpCode + partsEncoded + pixels + colours + '",\n';
+    var code = '"' + encodedOpCode + partsEncoded + pixels + colours + '",\n';
 
     return code;
 };
@@ -149,7 +151,7 @@ Blockly.LDL['ins_3_slider'] = function (block) {
     var encodedStartFar = Blockly.LDL.instructions.decToHex(startFar, 1);
 
     // Colour picker.
-    var code = '"instruction" : "' + encodedOpCode + encodedWidth + encodedStartFar + sliderColour + backgroundColour + '",\n';
+    var code = '"' + encodedOpCode + encodedWidth + encodedStartFar + sliderColour + backgroundColour + '",\n';
 
     return code;
 };
@@ -166,7 +168,7 @@ Blockly.LDL['ins_4_fade'] = function (block) {
     var encodedFadeOut = Blockly.LDL.instructions.decToHex(fadeOut, 1);
 
     // Colour picker.
-    var code = '"instruction" : "' + encodedOpCode + encodedStep + encodedFadeOut + startColour + endColour + '",\n';
+    var code = '"' + encodedOpCode + encodedStep + encodedFadeOut + startColour + endColour + '",\n';
 
     return code;
 };
@@ -185,7 +187,7 @@ Blockly.LDL['ins_5_stochastic'] = function (block) {
 
     var parts = branch.length / 6;
     var partsEncoded = Blockly.LDL.instructions.decToHex(parts, 2);
-    var code = '"instruction" : "' + encodedOpCode + partsEncoded + branch + '",\n';
+    var code = '"' + encodedOpCode + partsEncoded + branch + '",\n';
 
     return code;
 };
@@ -212,7 +214,32 @@ Blockly.LDL['ins_6_blocks'] = function (block) {
         colours += branch.substring(startPattern + 2, startPattern + 8);
     }
     var partsEncoded = Blockly.LDL.instructions.decToHex(parts, 2);
-    var code = '"instruction" : "' + encodedOpCode + partsEncoded + pixels + colours + '",\n';
+    var code = '"' + encodedOpCode + partsEncoded + pixels + colours + '",\n';
+
+    return code;
+};
+
+Blockly.LDL['ins_7_rainbow'] = function(block) {
+    var duration = Number(block.getFieldValue('duration'));
+    var encodedOpCode = Blockly.LDL.instructions.encodeInstructionOpcode(duration, 7);
+    var length = Number(block.getFieldValue('length'));
+    var lengthEncoded = Blockly.LDL.instructions.decToHex(length, 2);
+    var steps = Number(block.getFieldValue('steps'));
+    var stepsEncoded = Blockly.LDL.instructions.decToHex(steps, 2); 
+    var startFar = Number(block.getFieldValue('startFar') === 'TRUE');
+    var startFarEncoded = Blockly.LDL.instructions.decToHex(startFar, 1); 
+
+    // Colour picker.
+    var branch = Blockly.LDL.statementToCode(block, 'colours');
+    branch = branch !== null ? branch.trim() : null;
+
+    if (branch === null || branch.length <= 0 || branch.length % 6 !== 0) {
+        return "";
+    }
+
+    var parts = branch.length / 6;
+    var partsEncoded = Blockly.LDL.instructions.decToHex(parts, 2);
+    var code = '"' + encodedOpCode + lengthEncoded + stepsEncoded + startFarEncoded + partsEncoded + branch + '",\n';
 
     return code;
 };
