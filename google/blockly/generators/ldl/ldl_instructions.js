@@ -143,15 +143,19 @@ Blockly.LDL['ins_3_slider'] = function (block) {
     var duration = Number(block.getFieldValue('duration'));
     var width = Number(block.getFieldValue('width'));
     var startFar = Number(block.getFieldValue('startFar') === 'TRUE');
+    var headLength = Number(block.getFieldValue('headLength'));
+    var tailLength = Number(block.getFieldValue('tailLength'));
     var sliderColour = block.getFieldValue('sliderColour').replace('#', '').toUpperCase();
     var backgroundColour = block.getFieldValue('backgroundColour').replace('#', '').toUpperCase();
 
     var encodedOpCode = Blockly.LDL.instructions.encodeInstructionOpcode(duration, 3);
     var encodedWidth = Blockly.LDL.instructions.decToHex(width, 2);
+    var encodedHeadLength = Blockly.LDL.instructions.decToHex(headLength, 2);
+    var encodedTailLength = Blockly.LDL.instructions.decToHex(tailLength, 2);
     var encodedStartFar = Blockly.LDL.instructions.decToHex(startFar, 1);
 
     // Colour picker.
-    var code = '"' + encodedOpCode + encodedWidth + encodedStartFar + sliderColour + backgroundColour + '",\n';
+    var code = '"' + encodedOpCode + encodedWidth + encodedStartFar + encodedHeadLength + encodedTailLength + sliderColour + backgroundColour + '",\n';
 
     return code;
 };
